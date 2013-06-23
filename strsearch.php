@@ -1,56 +1,40 @@
 <?php
 class search
 {
-	const ASIZE = 256;
 	private $bmBc = array();
 	private $qsBc = array();
 	
-	private function memset(&$buffer, $c, $num) 
-	{ 
-    	$buffer = str_repeat($c, $num); 
-	} 
-
-	private function memcpy(&$dest, $offset, $src, $num=-1) 
-	{ 
-    
-    	if($num == -1)
-		{
-			$num=strlen($src);
-		}
-	 
-    	$dest = substr($dest, 0, $offset).substr($src, 0, $num).substr($dest, $offset+$num);
-	
-	}
-	
-	private function preBmBc($x, $m) 
+	private function preBmBc($pattern,$length) 
 	{
-   		$i;
- 	
-		/* build preprocessing array */
+ 		$pLen = $length;
+		/* not needed php doesn't have bouned arrays that need the be defined at a fixed size
    		for ($i = 0; $i < search::ASIZE; ++$i)
    		{
    	 		$this->bmBc[$i] = $m;
    		}
-     
-   		for ($i = 0; $i < $m - 1; ++$i)
+   		
+   		*/
+     		
+     		// create bad character array
+   		for ($i = 0; $i < $pLen - 1; ++$i)
    		{
-   			$this->bmBc[$x{$i}] = $m - $i - 1;
+   			$this->bmBc[(int)$pattern{$i}] = $pLen - $i - 1;
    		} 
       
 	}
 
-	private function preQsBc($x, $m)
+	private function preQsBc($pattern,$length)
 	{
-   		$i;
-		
+   		$pLen = $length;
+		/* removed not needed because arrays aren't bound to a fixed length
    		for ($i = 0; $i < search::ASIZE; ++$i)
 		{
 			$this->qsBc[$i] = $m + 1;
-		}
+		} */
 	  
-   		for ($i = 0; $i < $m; ++$i)
+   		for ($i = 0; $i < $pLen; ++$i)
    		{
-   			$this->qsBc[$x{$i}] = $m - $i;
+   			$this->qsBc[(int)$pattern{$i}] = $pLen - $i;
    		}
       
 	}
@@ -74,28 +58,28 @@ class search
   		return 0;  
   	}
 	// public function smith($x, $m, $y, $n)
-	public function smith($x, $y) 
+	public function smith($pattern, $text) 
 	{
-		$m = strlen($x);
-		$n = strlen($y);
+		$pLen = strlen($pattern);
+		$tLen = strlen($text);
 		
    		$j;
 
    		/* Preprocessing */
-  		$this->preBmBc($x, $m);
-  		$this->preQsBc($x, $m);
+  		$this->preBmBc($pattern,$pLen);
+  		$this->preQsBc($pattern,$pLen);
 
    		/* Searching */
   		 $j = 0;
 		 
-   		while ($j <= $n - $m) 
+   		while ($j <= $tLen - $pLen) 
 		{
-      		if ($this->memcmp($x, $y + $j, $m) == 0)
+      		if ($this->memcmp($pattern, $text + $j, $pLen) == 0)
 			{
 				echo $j;
 			}
          
-      		$j += max($this->bmBc[$y{$j + $m - 1}], $this->qsBc[$y{$j + $m}]);
+      		$j += max($this->bmBc[(int)$text{$j + $pLen - 1}], $this->qsBc[(int)$text{$j + $pLen}]);
 	  	}
    }
 }
