@@ -1,87 +1,87 @@
 <?php
-class search
+
+$pattern = 'GCAGAGAG';
+$text = 'GCATCGCAGAGAGTATACAGTACG';
+$len = strlen($pattern);
+$bmbadChars = array();
+$qsBadChars = array();
+
+function memcmp($str1, $str2, $amt, $addstr2 = 0, $addstr1 = 0)
 {
-	private $bmBc = array();
-	private $qsBc = array();
+	$rtn = -1;
 	
-	private function preBmBc($pattern,$length) 
+	for($i = 0; $i < $amt; $i++)
 	{
- 		$pLen = $length;
-		/* not needed php doesn't have bouned arrays that need the be defined at a fixed size
-   		for ($i = 0; $i < search::ASIZE; ++$i)
-   		{
-   	 		$this->bmBc[$i] = $m;
-   		}
-   		
-   		*/
-     		
-     		// create bad character array
-   		for ($i = 0; $i < $pLen - 1; ++$i)
-   		{
-   			$this->bmBc[(int)$pattern{$i}] = $pLen - $i - 1;
-   		} 
-      
-	}
-
-	private function preQsBc($pattern,$length)
-	{
-   		$pLen = $length;
-		/* removed not needed because arrays aren't bound to a fixed length
-   		for ($i = 0; $i < search::ASIZE; ++$i)
+		if(ord($str1[$i]) + $addstr1 == ord($str2[$i]) + $addstr2)
 		{
-			$this->qsBc[$i] = $m + 1;
-		} */
-	  
-   		for ($i = 0; $i < $pLen; ++$i)
-   		{
-   			$this->qsBc[(int)$pattern{$i}] = $pLen - $i;
-   		}
-      
-	}
-	
-	private function memcmp($cs, $ct, $n)
-	{
- 		$i;   
-
- 		for ($i = 0; $i < $n; $i++, $cs++, $ct++)
- 		{
-			if ($cs < $ct)
-			{
-  				return -1;
-			}
-			else if ($cs > $ct)
-			{
-  				return 1;
-			}
+			$rtn = -1;
 		}
-
-  		return 0;  
-  	}
-	// public function smith($x, $m, $y, $n)
-	public function smith($pattern, $text) 
-	{
-		$pLen = strlen($pattern);
-		$tLen = strlen($text);
-		
-   		$j;
-
-   		/* Preprocessing */
-  		$this->preBmBc($pattern,$pLen);
-  		$this->preQsBc($pattern,$pLen);
-
-   		/* Searching */
-  		 $j = 0;
-		 
-   		while ($j <= $tLen - $pLen) 
+		else
 		{
-      		if ($this->memcmp($pattern, $text + $j, $pLen) == 0)
-			{
-				echo $j;
-			}
-         
-      		$j += max($this->bmBc[(int)$text{$j + $pLen - 1}], $this->qsBc[(int)$text{$j + $pLen}]);
-	  	}
+			$rtn = 0;
+			break;
+		}
+	}
+	
+	return $rtn;
+}
+
+function BoyerMoyerBadCharcter($pattern, $patLen, &$bmbadChars) 
+{
+	//internal arrays for debugging 
+	$out2 = array();
+	
+   for ($i = 0; $i < $patLen - 1; ++$i)
+   {
+   		$bmbadChars[$pattern[$i]] = $patLen - $i - 1;
+		$out2[$pattern[$i]] = $patLen - $i - 1;
+   }
+   // output array
+   echo "Second array output is: <br />";
+   print_r($out2);
+}
+
+function QuickSearchBadCharacter($pattern, $patLen, &$qsBadChars) 
+{
+	//internal arrays for debugging 
+	$out2 = array();
+	
+   for ($i = 0; $i < $patLen; ++$i)
+   {
+   		$qsBadChars[$pattern[$i]] = $patLen - $i;
+		$out2[$pattern[$i]] = $patLen - $i;
+   }
+   // output array
+   echo "Second array output is: <br />";
+   print_r($out2);
+}
+
+function SmithSearch($pattern, $text) 
+{
+	$patLen = strlen($pattern);
+	$txtLen = strlen($text);
+	$bmbadChars = array();
+	$qsBadChars = array();
+	$j = 0;
+
+    BoyerMoyerBadCharcter($pattern, $patLen,$bmbadChars);
+    QuickSearchBadCharacter($pattern, $patLen, $qsBadChars);
+
+    while ($j <= $txtLen - $patLen) 
+    {
+    	if (memcmp($pattern, $text, $patLen, $j) == 0)
+	    {
+	    	print($j);
+	    } 
+      $j += max($bmbadChars[$text[$j + $patLen - 1]], $qsBadChars[$text[$j + $patLen]]);
    }
 }
-	
+
+BoyerMoyerBadCharcter($pattern,$len,$bmbadChars);
+
+QuickSearchBadCharacter($pattern,$len,$qsBadChars);
+
+SmithSearch($pattern,$text);
+
+
 ?>
