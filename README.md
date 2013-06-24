@@ -10,4 +10,4 @@ PHP implementation of the smith algorithm
 * ~~remove any C code that doesn't apply to php~~
 * ~~fix code that got messed up on the port.~~
 * fix any issues with memcmp php because matching is off by 2 positions and displays more occurences than there is.
-* added debugg array to see if the table matches the one from [http://www-igm.univ-mlv.fr/~lecroq/string/node21.html#SECTION00210]
+* added debugg array to see if the table matches the one from [smith algorithm resource in C](http://www-igm.univ-mlv.fr/~lecroq/string/node21.html#SECTION00210)
