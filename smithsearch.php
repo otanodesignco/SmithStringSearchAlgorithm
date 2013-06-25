@@ -1,4 +1,5 @@
 <?php
+error_reporting(0); // suppress errors because we know what the issues is and the line number
 
 //$pattern = 'GCAGAGAG';
 $pattern = 'GCAGAGAG';
@@ -109,8 +110,8 @@ function SmithSearch($pattern, $text)
 	$qsBadChars = array_fill(0,256, $patLen);
 	$j = 0;
 
-    BoyerMoyerBadCharcter($pattern, $patLen,&$bmbadChars);
-    QuickSearchBadCharacter($pattern, $patLen, &$qsBadChars);
+    BoyerMoyerBadCharcter($pattern, $patLen,$bmbadChars); // removed & on badchars
+    QuickSearchBadCharacter($pattern, $patLen, $qsBadChars); // removed & on badchars
 
     while ($j <= $txtLen - $patLen) 
     {
