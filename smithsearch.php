@@ -74,31 +74,31 @@ function memcmp($str1, $str2, $amt, $addstr2 = 0, $addstr1 = 0)
 function BoyerMoyerBadCharcter($pattern, $patLen, &$bmbadChars) 
 {
 	//internal arrays for debugging 
-	$out2 = array();
+	//$out2 = array();
 	
    for ($i = 0; $i < $patLen - 1; ++$i)
    {
    		$bmbadChars[$pattern[$i]] = $patLen - $i - 1;
-		$out2[$pattern[$i]] = $patLen - $i - 1;
+		//$out2[$pattern[$i]] = $patLen - $i - 1;
    }
    // output array
-   echo "Second array output is: <br />";
-   print_r($out2);
+   //echo "Second array output is: <br />";
+   //print_r($out2);
 }
 
 function QuickSearchBadCharacter($pattern, $patLen, &$qsBadChars) 
 {
 	//internal arrays for debugging 
-	$out2 = array();
+	//$out2 = array();
 	
    for ($i = 0; $i < $patLen; ++$i)
    {
    		$qsBadChars[$pattern[$i]] = $patLen - $i;
-		$out2[$pattern[$i]] = $patLen - $i;
+		//$out2[$pattern[$i]] = $patLen - $i;
    }
    // output array
-   echo "Second array output is: <br />";
-   print_r($out2);
+   //echo "Second array output is: <br />";
+   //print_r($out2);
 }
 
 function SmithSearch($pattern, $text) 
