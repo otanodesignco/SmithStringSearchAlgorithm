@@ -11,6 +11,7 @@ Sample usage:
 include the file, use the namespace and
 
 $smith = new Smith( "Text", "Pattern" );
+
 $smith->Search();
 
 Easy as two lines of code. Right now the output is the text highlighted with the matching pattern if the pattern is in the text. I haven't decided how to handle this yet.
